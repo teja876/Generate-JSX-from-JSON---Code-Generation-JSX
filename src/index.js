@@ -7,22 +7,23 @@ let answer = "";
 
 function camelize(str) {
     return str
-      .replace(/\w+/g, function (word, index) {
-        return index === 0
-          ? word.toLowerCase()
-          : word[0].toUpperCase() + word.slice(1);
-      })
-      .replace(/[-]/g, "");
+    .replace(/\w+/g, function (word, index) {
+      return index === 0
+        ? word.toLowerCase()
+        : word[0].toUpperCase() + word.slice(1);
+    })
+    .replace(/[-]/g, "")
+    .replace(/\s+/g, "");
   }
 
 function addStyle(obj){
-    if(obj === undefined || Object.keys(obj).length() === 0) return;
+    if(obj === undefined || Object.keys(obj).length === 0) return;
     answer += " style={{";
     for(const [key, value] of Object.entries(obj)){
-        answer += key + ":";
-        answer += `"${camelize(value)}",`;
+        answer += camelize(key) + ":";
+        answer += `"${value}",`;
     }
-    answer.slice(0, -1);
+    answer = answer.slice(0, -1);
     answer += "}}";
 }
 
@@ -30,13 +31,13 @@ function formString(obj){
     answer += `<${obj.name}`;
     addStyle(obj.style);
     let children = obj.children;
-    if(children.length() === 0) {
-        answer += "/>";
+    if(children.length === 0) {
+        answer += "/>\n";
         return;
     }
     else{
         answer += ">\n";
-        for(let i = 0; i < children.length(); i++){
+        for(let i = 0; i < children.length; i++){
             formString(children[i]);
         }
     }
