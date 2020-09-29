@@ -16,11 +16,15 @@ function camelize(str) {
     .replace(/\s+/g, "");
   }
 
+
+function removeSpaces(str){
+    return str.split(" ").join("");
+}
 function addStyle(obj){
     if(obj === undefined || Object.keys(obj).length === 0) return;
     answer += " style={{";
     for(const [key, value] of Object.entries(obj)){
-        answer += camelize(key) + ":";
+        answer += removeSpaces(camelize(key)) + ":";
         answer += `"${value}",`;
     }
     answer = answer.slice(0, -1);
@@ -28,7 +32,7 @@ function addStyle(obj){
 }
 
 function formString(obj){
-    answer += `<${obj.name}`;
+    answer += `<${removeSpaces(obj.name)}`;
     addStyle(obj.style);
     let children = obj.children;
     if(children === undefined || children.length === 0) {
@@ -41,7 +45,7 @@ function formString(obj){
             formString(children[i]);
         }
     }
-    answer += "</" + obj.name + ">";
+    answer += "</" + removeSpaces(obj.name) + ">";
 }
 
 function generateCodeFromObject(obj){
