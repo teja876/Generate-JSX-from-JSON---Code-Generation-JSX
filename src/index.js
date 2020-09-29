@@ -25,7 +25,7 @@ function addStyle(obj){
     answer += " style={{";
     for(const [key, value] of Object.entries(obj)){
         answer += removeSpaces(camelize(key)) + ":";
-        answer += `"${value}",`;
+        answer += `"${removeSpaces(value)}",`;
     }
     answer = answer.slice(0, -1);
     answer += "}}";
