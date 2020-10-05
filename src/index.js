@@ -1,53 +1,56 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App";
-const title = (str) =>{
-    return str.replace(
-        /\w\S*/g,
-        function (txt){
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        }
-    ).replace(" ", "");
-}
+let answer = "";
 
-const camelCase = (str) =>{
-    str = str.replace("-", " ")
+
+function camelize(str) {
     return str
-    .replace(/\s(.)/g, function (s1) { return s1.toUpperCase();})
-    .replace(/\s/g, '')
-    .replace(/^(.)/, function (s1){return s1.toLowerCase();})
+    .replace(/\w+/g, function (word, index) {
+      return index === 0
+        ? word.toLowerCase()
+        : word[0].toUpperCase() + word.slice(1);
+    })
+    .replace(/[-]/g, "")
+    .replace(/\s+/g, "");
+  }
+
+
+function removeSpaces(str){
+    return str.split(" ").join("");
+}
+function addStyle(obj){
+    if(obj === undefined || Object.keys(obj).length === 0) return;
+    answer += " style={{";
+    for(const [key, value] of Object.entries(obj)){
+        answer += removeSpaces(camelize(key)) + ":";
+        answer += `"${removeSpaces(value + '')}",`;
+    }
+    answer = answer.slice(0, -1);
+    answer += "}}";
 }
 
-const jsonToJsx = (obj) => {
-    let ansStr = "<";
-    ansStr += title(obj.name) + " ";
-    if (obj.style !== undefined && Object.keys(obj.style).length>0){
-        var stKeys = Object.keys(obj.style)
-        ansStr += "style={{"
-        for (var i=0; i < stKeys.length; i++){
-            ansStr += camelCase(stKeys[i]) + ':"' + obj.style[stKeys[i]] + '",';
-        }
-        ansStr = ansStr.substr(0, ansStr.length-1) + "}}"
-    }
-
-    if (obj.children !== undefined && obj.children.length > 0){
-        ansStr += ">\n";
-        for (var i=0; i < obj.children.length; i++){
-            ansStr += jsonToJsx(obj.children[i])
-        }
-        ansStr += "</" + title(obj.name) + ">"
+function formString(obj){
+    answer += `<${removeSpaces(obj.name)}`;
+    addStyle(obj.style);
+    let children = obj.children;
+    if(children === undefined || children.length === 0) {
+        answer += " />\n";
+        return;
     }
     else{
-        ansStr += "/>"
+        answer += ">\n";
+        for(let i = 0; i < children.length; i++){
+            formString(children[i]);
+        }
     }
-
-    return ansStr
+    answer += "</" + removeSpaces(obj.name) + ">";
 }
 
-
 function generateCodeFromObject(obj){
+    formString(obj);
+    return answer;
     //return a code generated string
-    return jsonToJsx(obj)
    }
    
    module.exports=generateCodeFromObject;
