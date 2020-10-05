@@ -1,11 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App";
-
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./components/App";
-
 const title = (str) =>{
     return str.replace(
         /\w\S*/g,
@@ -55,9 +50,6 @@ function generateCodeFromObject(obj){
     return jsonToJsx(obj)
    }
    
-module.exports=generateCodeFromObject;
-
-
-
+   module.exports=generateCodeFromObject;
 
 // ReactDOM.render(<App />, document.getElementById("root"));
