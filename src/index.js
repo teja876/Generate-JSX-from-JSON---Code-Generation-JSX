@@ -36,7 +36,7 @@ function formString(obj){
     addStyle(obj.style);
     let children = obj.children;
     if(children === undefined || children.length === 0) {
-        answer += "/>\n";
+        answer += " />\n";
         return;
     }
     else{
